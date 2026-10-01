@@ -1,0 +1,28 @@
+{
+  "name": "tokenshield-contextplus",
+  "version": "1.0.1",
+  "description": "Public documentation, issue tracker, and quickstart hub for TokenShield & Context++ — AI Coding Token Economizer & Model Fatigue Shield",
+  "keywords": [
+    "cursor",
+    "claude-code",
+    "windsurf",
+    "token-saver",
+    "context-window",
+    "model-fatigue",
+    "ast-rag",
+    "tokenshield",
+    "contextplus",
+    "mcp-server"
+  ],
+  "homepage": "https://praveenojha.com/tokenshield",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PraveenOjha/tokenshield-contextplus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PraveenOjha/tokenshield-contextplus/issues"
+  },
+  "author": "Praveen Ojha <support@praveenojha.com>",
+  "license": "Commercial",
+  "private": false
+}

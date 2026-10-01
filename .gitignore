@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Local Environment & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Build & Compilation Artifacts
+dist/
+build/
+*.vsix
+out/
+
+# System Files
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# Internal TokenShield Private Vaults
+.agents/
+.tokenshield/
