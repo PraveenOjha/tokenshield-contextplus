@@ -24,3 +24,11 @@ npm-debug.log*
 # Internal TokenShield Private Vaults
 .agents/
 .tokenshield/
+
+# Proprietary Core Engines & Internal Python Scripts
+core/
+scripts/
+*.py
+*.pyc
+__pycache__/
+scratch/
