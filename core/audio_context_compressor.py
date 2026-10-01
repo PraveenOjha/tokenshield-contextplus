@@ -475,12 +475,135 @@ def log_telemetry_savings(tokens_saved: int, duration_ms: float, details: str):
         except Exception:
             pass
 
+def intercept_audio(input_file: str, auto_whisper: bool = False) -> dict:
+    """
+    Transparent Interceptor:
+    Sits over audio recording sends. When any audio is sent to an agent or placed in workspace:
+    1. Intercepts the raw file.
+    2. Runs In-RAM VAD silence trimming & pause contraction.
+    3. Caches the result in `_compressed.wav` (or ~/.tokenshield/scratch).
+    4. Automatically updates live TokenShield token savings telemetry.
+    5. Returns the optimized file path for the agent to consume.
+    """
+    import time
+    if not os.path.exists(input_file):
+        return {"error": f"File not found: {input_file}"}
+
+    # Avoid re-compressing already compressed audio
+    if "compressed" in input_file.lower():
+        dur = get_audio_duration_wav(input_file)
+        tokens = int(round(dur * PROVIDER_RATES["gemini"]))
+        return {
+            "status": "already_compressed",
+            "path": input_file,
+            "duration_s": dur,
+            "tokens": tokens,
+            "tokens_saved": 0
+        }
+
+    t0 = time.time()
+    dir_name = os.path.dirname(os.path.abspath(input_file))
+    base_name = os.path.splitext(os.path.basename(input_file))[0]
+    out_file = os.path.join(dir_name, f"{base_name}.compressed.wav")
+
+    # Handle format conversion if not raw WAV
+    temp_dir = os.path.expanduser("~/.tokenshield/scratch")
+    os.makedirs(temp_dir, exist_ok=True)
+    temp_wav = os.path.join(temp_dir, f"{base_name}_in.wav")
+
+    if input_file.lower().endswith(".wav"):
+        wav_target = input_file
+    else:
+        if not convert_to_wav_if_needed(input_file, temp_wav):
+            return {"error": "Could not decode audio. Ensure ffmpeg is installed."}
+        wav_target = temp_wav
+
+    res = compress_wav_silence(wav_target, out_file)
+    dt_ms = (time.time() - t0) * 1000.0
+
+    if "error" in res:
+        return res
+
+    log_telemetry_savings(
+        res["tokens_saved"],
+        dt_ms,
+        f"Auto-Intercept: {res['original_duration_s']}s -> {res['compressed_duration_s']}s ({res['duration_reduction_pct']}% saved)"
+    )
+
+    result = {
+        "status": "auto_compressed",
+        "original_file": input_file,
+        "optimized_file": out_file,
+        "original_tokens": res["original_tokens"],
+        "compressed_tokens": res["compressed_tokens"],
+        "tokens_saved": res["tokens_saved"],
+        "reduction_pct": res["duration_reduction_pct"],
+        "duration_s": res["compressed_duration_s"],
+        "interceptor": "TokenShield Audio Guard Active"
+    }
+
+    if auto_whisper:
+        stt = transcribe_audio_whisper(out_file)
+        if stt.get("success"):
+            prompt_res = compress_voice_transcript(stt.get("text", ""))
+            result["whisper_transcript"] = prompt_res["compact_text"]
+            result["text_tokens_saved"] = prompt_res["estimated_tokens_saved"]
+
+    return result
+
+def watch_audio_directory(watch_dir: str):
+    """
+    Continuous Watcher Daemon:
+    Sits over all audio recordings sent to `watch_dir` and auto-compresses them on arrival.
+    """
+    import time
+    watch_path = os.path.abspath(watch_dir)
+    os.makedirs(watch_path, exist_ok=True)
+
+    print("\n" + "=" * 65)
+    print("🛡️  TOKENSHIELD AUDIO CONTEXT INTERCEPTOR & WATCHER")
+    print("=" * 65)
+    print(f"Monitoring: {watch_path}")
+    print("Watching for new audio recordings (.wav, .mp3, .m4a, .webm, .ogg)...")
+    print("Press Ctrl+C to stop.\n")
+
+    processed = set()
+    for root, _, files in os.walk(watch_path):
+        for f in files:
+            if any(f.lower().endswith(ext) for ext in [".wav", ".mp3", ".m4a", ".webm", ".ogg"]):
+                processed.add(os.path.join(root, f))
+
+    try:
+        while True:
+            time.sleep(1.0)
+            for root, _, files in os.walk(watch_path):
+                for f in files:
+                    if "compressed" in f.lower():
+                        continue
+                    if any(f.lower().endswith(ext) for ext in [".wav", ".mp3", ".m4a", ".webm", ".ogg"]):
+                        full_p = os.path.join(root, f)
+                        if full_p not in processed:
+                            processed.add(full_p)
+                            print(f"\n🎙️ [Audio Detected] Intercepting: {f}")
+                            res = intercept_audio(full_p)
+                            if "error" not in res:
+                                print(f"   ✓ Auto-Compressed: {res['duration_s']}s (Saved {res['tokens_saved']} tokens, {res['reduction_pct']}% reduction)")
+                                print(f"   📁 Lean file: {res['optimized_file']}")
+                            else:
+                                print(f"   ⚠️ Intercept failed: {res.get('error')}")
+    except KeyboardInterrupt:
+        print("\nWatcher stopped.")
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage:")
         print("  python audio_context_compressor.py compress <input_audio> [output_audio]")
+        print("  python audio_context_compressor.py intercept <input_audio>")
+        print("  python audio_context_compressor.py watch [directory]")
         print("  python audio_context_compressor.py guard <input_audio> [--max-tokens 2500]")
         print("  python audio_context_compressor.py text <transcript_text>")
+        print("  python audio_context_compressor.py whisper <input_audio>")
+        print("  python audio_context_compressor.py status")
         sys.exit(0)
 
     import time
@@ -496,7 +619,6 @@ if __name__ == "__main__":
             out_file = in_file + ".compressed.wav"
 
         t0 = time.time()
-        # Handle conversion if needed
         temp_dir = os.path.expanduser("~/.tokenshield/scratch")
         os.makedirs(temp_dir, exist_ok=True)
         temp_wav = os.path.join(temp_dir, "in_converted.wav")
@@ -522,6 +644,18 @@ if __name__ == "__main__":
         else:
             print(json.dumps(res))
 
+    elif action in ["intercept", "auto"]:
+        if len(sys.argv) < 3:
+            print("Error: Specify audio input file.")
+            sys.exit(1)
+        in_file = sys.argv[2]
+        res = intercept_audio(in_file)
+        print(json.dumps(res, indent=2))
+
+    elif action in ["watch", "monitor"]:
+        target_dir = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.getcwd(), "recordings")
+        watch_audio_directory(target_dir)
+
     elif action == "guard":
         if len(sys.argv) < 3:
             print("Error: Specify audio input file.")
@@ -545,6 +679,14 @@ if __name__ == "__main__":
         res = transcribe_and_compact_pipeline(in_file, simulated_transcript=sim_transcript)
         print(json.dumps(res, indent=2))
 
+    elif action == "text":
+        if len(sys.argv) < 3:
+            print("Error: Specify text transcript.")
+            sys.exit(1)
+        text_input = " ".join(sys.argv[2:])
+        res = compress_voice_transcript(text_input)
+        print(json.dumps(res, indent=2))
+
     elif action in ["status", "check"]:
         backend = detect_whisper_backend()
         print(json.dumps({
@@ -554,4 +696,4 @@ if __name__ == "__main__":
             "default_provider_rate": f"{PROVIDER_RATES['gemini']} tokens/second"
         }, indent=2))
     else:
-        print(f"Unknown action '{action}'. Available: compress, guard, text, whisper, pipeline, status")
+        print(f"Unknown action '{action}'. Available: compress, intercept, watch, guard, text, whisper, pipeline, status")
