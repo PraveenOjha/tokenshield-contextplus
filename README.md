@@ -41,6 +41,8 @@ Modern AI coding agents (**Cursor**, **Claude Code**, **Windsurf**, **Aider**, *
 - **Offline Local GPU Pre-Flight Lint ($0.00 Cost):** Intercepts syntax validation, missing brackets, and type audits by dispatching to local quantized models (e.g., Qwen2.5-Coder on Ollama/LM Studio) in < 1s offline at zero cloud cost.
 - **Surgical Diff Economizer:** Strips out bloated boilerplate diffs and outputs high-density surgical unified patches, saving 70% to 95% of context window space.
 - **Chat Context Carry-Over:** Snapshot active tasks, touched files, and architectural decisions into a persistent vault (`chat push` / `chat pop`), or export portable bundles (`chat export` / `chat import`) across machines without losing project state.
+
+- **Audio Context Compressor & Token Guard (New):** Prevents multimodal audio token explosion in voice-coding agents. Strips dead-air silence, contracts pauses >250ms down to 60ms, and integrates a Whisper speech-to-text pipeline that runs voice prompts through the Voice-to-Code Prompt Compactor (pruning conversational fillers and stutters), slashing audio context costs by **75% to 95%**.
 - **Low-RAM Mode:** On lightweight laptops (8–16GB RAM), run in ultra-light zero-LLM mode (`npx tokenshield low-ram on`) while preserving full In-RAM AST indexing speed.
 
 ---

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tokenshield": {
+      "command": "npx",
+      "args": ["-y", "tokenshield-contextplus", "mcp"]
+    }
+  }
+}
