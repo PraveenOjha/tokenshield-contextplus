@@ -13,6 +13,7 @@ package-lock.json
 dist/
 build/
 *.vsix
+!deliverables/vsix/*.vsix
 out/
 
 # System Files

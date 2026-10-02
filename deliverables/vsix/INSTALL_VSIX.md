@@ -1,7 +1,7 @@
 # TokenShield ContextPlus — VS Code & Cursor Extension (.vsix)
 
 ## Deliverable File
-- **VSIX Package:** [`tokenshield-contextplus-1.0.1.vsix`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/vsix/tokenshield-contextplus-1.0.1.vsix)
+- **VSIX Package:** [`tokenshield-contextplus-1.0.7.vsix`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/vsix/tokenshield-contextplus-1.0.7.vsix)
 
 ---
 
@@ -12,15 +12,18 @@
 2. Press `Ctrl+Shift+X` (or `Cmd+Shift+X` on macOS) to open the **Extensions** view.
 3. Click the **`...` (Views and More Actions)** menu at the top right of the Extensions panel.
 4. Select **Install from VSIX...**
-5. Pick `tokenshield-contextplus-1.0.1.vsix`.
+5. Pick `tokenshield-contextplus-1.0.7.vsix`.
 
 ### Method B: Terminal Command Line (Instant)
 ```bash
 # For VS Code:
-code --install-extension deliverables/vsix/tokenshield-contextplus-1.0.1.vsix
+code --install-extension deliverables/vsix/tokenshield-contextplus-1.0.7.vsix
 
 # For Cursor:
-cursor --install-extension deliverables/vsix/tokenshield-contextplus-1.0.1.vsix
+cursor --install-extension deliverables/vsix/tokenshield-contextplus-1.0.7.vsix
+
+# For Windsurf:
+windsurf --install-extension deliverables/vsix/tokenshield-contextplus-1.0.7.vsix
 ```
 
 ---

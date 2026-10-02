@@ -14,7 +14,7 @@ deliverables/
 │   ├── CLAUDE_INTEGRATION_GUIDE.md   # Step-by-step setup guide for Claude Desktop & CLI
 │   └── test_claude_mcp.js            # Automated verification test script (100% Pass)
 ├── vsix/
-│   ├── tokenshield-contextplus-1.0.1.vsix  # Pre-compiled extension package
+│   ├── tokenshield-contextplus-1.0.7.vsix  # Pre-compiled extension package
 │   └── INSTALL_VSIX.md                     # Installation guide for VS Code / Cursor / Windsurf
 ├── npm/
 │   └── NPM_QUICKSTART.md             # CLI reference & npm commands
@@ -30,7 +30,7 @@ deliverables/
 | **Claude Desktop Config** | [`claude_desktop_config.json`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/claude/claude_desktop_config.json) | Drop-in MCP server definition for Claude Desktop app |
 | **Claude Code Config** | [`claude_code_config.json`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/claude/claude_code_config.json) | MCP configuration for Claude Code terminal agent |
 | **Claude MCP Test Script** | [`test_claude_mcp.js`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/claude/test_claude_mcp.js) | Full JSON-RPC stdio verification (Handshake, Tools List, Execution) |
-| **Compiled VSIX Extension** | [`tokenshield-contextplus-1.0.1.vsix`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/vsix/tokenshield-contextplus-1.0.1.vsix) | Installable package for VS Code, Cursor, and Windsurf |
+| **Compiled VSIX Extension** | [`tokenshield-contextplus-1.0.7.vsix`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/vsix/tokenshield-contextplus-1.0.7.vsix) | Installable package for VS Code, Cursor, and Windsurf |
 | **VSIX Setup Guide** | [`INSTALL_VSIX.md`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/vsix/INSTALL_VSIX.md) | How-to install & verify zero-touch auto-bootstrap |
 | **npm CLI Reference** | [`NPM_QUICKSTART.md`](file:///home/praveen/Desktop/work/portfolio-engine/portfolioEngine/deliverables/npm/NPM_QUICKSTART.md) | CLI commands, model switching, and local links |
 
