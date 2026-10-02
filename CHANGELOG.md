@@ -4,6 +4,36 @@ All notable changes, architectural refactors, and diagnostic enhancements to **T
 
 ---
 
+## [1.0.8] - 2026-10-02
+
+### 🐛 Critical Extension Packaging & Subsystem Bug Fixes
+- **Resolved Missing Helper Scripts (`bin/cli.js`, `core/*.py`)**:
+  - Fixed an issue where `.vscodeignore` patterns or packaging scripts omitted necessary CLI and Python runtime dependencies in universal `.vsix` distribution.
+  - Added multi-path resolution fallback in `modules/cli.js` to dynamically locate `bin/cli.js` across workspace, extension folder, and global npm paths.
+- **Extension Modularization**:
+  - Refactored monolithic `extension.js` into maintainable decoupled subsystems (`modules/cli.js`, `modules/pricing.js`, `modules/dashboard-html.js`).
+  - Added robust IPC dispatch handling for all 28 extension commands (`reindex`, `check`, `installOllama`, `registerMcp`, `reinjectRules`).
+
+### 📦 Popular Agent Skills Bundled Out-of-the-Box
+- Included 5 production-ready AI agent skills directly in the extension package (`skills/`):
+  - **`surgical-diff`**: Powered by `core/agent_diff_economizer.py` & `tokenshield diff`. Instructs AI agents to emit surgical 3-line unified diff chunks and avoid full-file rewrites, saving 70%–95% on context tokens.
+  - **`zero-any`**: Strict TypeScript (`no any`) and Python PEP 484/526 typing guardian.
+  - **`path-agnostic`**: Serverless & cross-platform portability sentry (enforces `process.cwd()`, normalized `/`, zero hardcoded paths).
+  - **`commit-craft`**: Conventional Commits standardizer with automatic pre-commit credential and API secret scanning.
+  - **`caveman`**: Ultra-terse, high-density, zero-fluff responses for 60%–80% output token savings.
+
+### 🎨 Boutique Dashboard UX & Navigation Refinements
+- **Production Apps Showcase Accordion**:
+  - Encapsulated boutique production showcase into a clean, collapsible `<details id="showcaseAccordion">` (`🛠️ Production Apps I Built • Why TokenShield Exists`), collapsed by default.
+  - Corrected app naming to **Thermal Camera FX** and linked PortSync directly to `https://www.praveenojha.com/portsync`.
+- **Target Cloud AI Radar Expansion**:
+  - Added Google Gemini frontier models (`gemini-3-8-flash`, `gemini-3-8-flash-medium`, `gemini-4-flash`, `gemini-4-pro`, `gemini-2-5-pro`, `gemini-2-5-flash`) to the live token economizer radar.
+  - Autonomously defaults to Gemini 3.8 Flash in Google Antigravity / Gemini IDE environments.
+- **Collapsible Entitlement Tiers Table**:
+  - Compacted the licensing matrix into `<details id="tiersAccordion">`, automatically expanding with an advisory alert if token usage reaches ≥ 95,000 (95k).
+
+---
+
 ## [1.0.7] - 2026-10-02
 
 ### 🔒 Zero-PII Privacy & Local-Only Guarantee

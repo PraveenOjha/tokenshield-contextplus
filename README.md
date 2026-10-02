@@ -36,19 +36,23 @@ Modern AI coding agents (Cursor, Claude Code, Windsurf, Aider) suffer from two m
 
 ---
 
-## 💡 The Origin Story: Why We Built TokenShield
+## 💡 Proven in Production: Why We Built TokenShield
 
-TokenShield was not created in a vacuum or as a theoretical demo. It was forged in production battle while building **PortSync** alongside modernized cross-platform applications like **Animal Vision** and **Thermal Camera**.
+TokenShield was not created in a vacuum or as a theoretical demo. It was forged in production battle across **4,400+ files and 4 interconnected workspaces** while architecting mission-critical, modern applications:
 
-As our unified architecture grew past **4,400+ files and 4 interconnected workspaces**, we hit a brutal wall that every serious developer using AI coding agents eventually runs into:
-1. **The Model Could Not Comprehend the Entire Codebase:** Modern frontier models (Claude 3.5 Sonnet, GPT-4o, Cursor Agent) cannot hold 4,000 files in active memory without severe attention dilution. Even with 200k token windows, "context rot" caused the AI to forget core architectural patterns, break existing imports, and hallucinate outdated conventions.
-2. **Astronomical Token Bills:** Asking simple questions like *"Where is this route handler invoked?"* triggered massive context dumps of 50KB–200KB per turn, racking up hundreds of dollars in API bills each week.
-3. **Model Fatigue & Context Amnesia:** Long coding sessions degraded rapidly. After 15 turns, the agent would lose track of what it had edited in turn 3, rewriting working code and causing endless loop errors.
+| Production App | Category & Technology | Live Access & Architecture |
+|---|---|---|
+| **PortSync** | Unified Media Distribution & Creative Automation | [praveenojha.com/portsync](https://www.praveenojha.com/portsync) • Multi-service REST & GPU workers |
+| **Thermal Camera FX** | Real-Time Thermal Vision & IR Simulation | Multi-spectrum thermal shaders, color palette mapping |
+| **Animal Vision** | Multi-Species Chromatic Perception Simulator | Compound eye simulation, UV spectrum emulation |
 
-**We had to build TokenShield to solve our own daily crisis:**
-By moving AST call-graph indexing into sub-15ms local RAM (SQLite BM25), pre-flighting syntax on local GPUs/CPUs at $0 cost, and creating a cryptographic context push/pop carry-over vault, our AI agents went from fatigued and amnesiac to **laser-focused and architecturally disciplined**.
+### The Problem We Solved:
+1. **Severe Model Context Dilution:** Frontier models (Claude 3.7/Sonnet, GPT-4o, Cursor Agent) dilute attention past 20–30 turns across large codebases, breaking existing conventions and hallucinating imports.
+2. **Exponential Cloud API Costs:** Repeatedly dumping full files for 5-line edits racks up hundreds of dollars in cloud bills per week.
+3. **Session Amnesia:** Coding agents would lose track of earlier changes, causing circular loops.
 
-In our first few days alone, TokenShield saved **167,400+ cloud tokens**, cut API costs by 84%, and allowed us to ship PortSync, Animal Vision, and Thermal Camera without hitting token caps or model fatigue. We are now sharing this exact internal battery with the global developer community.
+### The TokenShield Solution:
+By moving AST call-graph indexing into local RAM (< 15ms SQLite BM25), pre-flighting syntax on local models at $0 cost, and enforcing **surgical 3-line diffs** via bundled skills, our agents became **laser-focused and architecturally disciplined** — saving **84% on cloud tokens** and eliminating context fatigue.
 
 ---
 
